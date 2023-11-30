@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+  nest:
+    container_name: nest
+    build:
+      context: ..
+      dockerfile: .docker/dev.Dockerfile
+    volumes:
+      - ../.:/app
+      - nestmods:/app/node_modules
+    environment:
+      - LAUNCHY_DRY_RUN=true
+      - BROWSER=/dev/null
+    ports:
+      - 3000:3000
+      - 9229:9229
+    tty: true
+    stdin_open: true
+
+volumes:
+  nestmods:
