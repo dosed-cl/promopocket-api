@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 services:
   nest:
     container_name: nest
@@ -6,16 +6,26 @@ services:
       context: ..
       dockerfile: .docker/dev.Dockerfile
     volumes:
-      - ../.:/app
-      - nestmods:/app/node_modules
-    environment:
-      - LAUNCHY_DRY_RUN=true
-      - BROWSER=/dev/null
+      - ../.:/app:cached
+      - nestmods:/app/node_modules:cached
     ports:
       - 3000:3000
       - 9229:9229
+    restart: unless-stopped
     tty: true
     stdin_open: true
 
+  psql:
+    container_name: psql
+    image: postgres:15
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - psqldata:/var/lib/postgresql/data
+    restart: unless-stopped
+
 volumes:
   nestmods:
+  psqldata:
