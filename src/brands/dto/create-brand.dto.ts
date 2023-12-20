@@ -9,7 +9,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateCategoryDto {
+export class CreateBrandDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
@@ -27,12 +27,12 @@ export class CreateCategoryDto {
   @IsUrl()
   @IsOptional()
   @ApiProperty()
-  color: string;
+  url: string;
 
   @IsUrl()
   @IsOptional()
   @ApiProperty()
-  image: string;
+  logo: string;
 
   @IsOptional()
   @IsArray()

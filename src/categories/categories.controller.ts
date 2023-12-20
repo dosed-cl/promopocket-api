@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -33,14 +34,14 @@ export class CategoriesController {
 
   @Get(':id')
   @ApiOkResponse({ type: CategoryEntity })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: CategoryEntity })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, updateCategoryDto);
@@ -48,7 +49,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @ApiOkResponse({ type: CategoryEntity })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.remove(id);
   }
 }

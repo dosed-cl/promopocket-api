@@ -11,10 +11,36 @@ datasource db {
 }
 
 model Category {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  displayName String
+  id          Int      @id @unique @default(autoincrement())
+  key         String   @unique
+  name        String
+  color       String?
+  image       String?
   alias       String[] @default([])
+  brands      CategoriesOnBrands[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Brand {
+  id          Int      @id @unique @default(autoincrement())
+  key         String   @unique
+  name        String
+  url         String?
+  logo        String?
+  alias       String[] @default([])
+  categories  CategoriesOnBrands[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CategoriesOnBrands {
+  id          Int      @id @unique @default(autoincrement())
+  brandId     Int
+  brand       Brand    @relation(fields: [brandId], references: [id])
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([brandId, categoryId])
 }

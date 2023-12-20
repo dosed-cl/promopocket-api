@@ -4,40 +4,58 @@ import { PrismaClient } from '@prisma/client';
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
-async function main() {
+async function loadCategories() {
   const categories = [
-    { name: 'deportes', displayName: 'Deportes y Wellness' },
-    { name: 'entretencion', displayName: 'Entretención' },
-    { name: 'viajes', displayName: 'Viajes' },
-    { name: 'alimentos', displayName: 'Alimentos y bebidas' },
-    { name: 'apps', displayName: 'Apps' },
-    { name: 'hobbies', displayName: 'Hobbies' },
-    { name: 'salud', displayName: 'Salud y Belleza' },
-    { name: 'supermercado', displayName: 'Supermercado' },
-    { name: 'transporte', displayName: 'Transporte' },
-    { name: 'e-commerce', displayName: 'E-commerce' },
-    { name: 'automotriz', displayName: 'Automotriz' },
-    { name: 'hogar', displayName: 'Hogar' },
-    { name: 'vestuario', displayName: 'Vestuario y Calzado' },
-    { name: 'accesorios', displayName: 'Accesorios' },
-    { name: 'educacion', displayName: 'Educación' },
-    { name: 'kids', displayName: 'Kids' },
-    { name: 'mascotas', displayName: 'Mascotas' },
-    { name: 'tecno', displayName: 'Tecnología' },
-    { name: 'otros', displayName: 'Otros' },
+    { key: 'sports', name: 'Deportes y Wellness' },
+    { key: 'clothing', name: 'Vestuario y Calzado' },
+    { key: 'education', name: 'Educación' },
+    { key: 'health', name: 'Salud y Belleza' },
+    { key: 'apps', name: 'Apps' },
+    { key: 'transport', name: 'Transporte' },
+    { key: 'cars', name: 'Automotriz' },
+    { key: 'entertaiment', name: 'Entretención' },
+    { key: 'groceries', name: 'Supermercado' },
+    { key: 'kids', name: 'Kids' },
+    { key: 'tech', name: 'Tecnología' },
+    { key: 'pets', name: 'Mascotas' },
+    { key: 'travels', name: 'Viajes' },
+    { key: 'home', name: 'Hogar' },
+    { key: 'ecommerce', name: 'E-commerce' },
+    { key: 'food', name: 'Alimentos y bebidas' },
   ];
 
-  const promises = categories.map(async ({ name, displayName }) => {
+  const promises = categories.map(async ({ key, name }) => {
     return await prisma.category.upsert({
-      where: { name },
+      where: { key },
       update: {},
-      create: { name, displayName },
+      create: { key, name },
     })
-  })
-
+  });
   const results = await Promise.all(promises);
 
-  console.log({ results });
+  console.log({ categories: results });
+}
+
+async function loadBrands() {
+  const brands = [
+    { key: 'sports', name: 'Deportes y Wellness' },
+  ];
+
+  const promises = brands.map(async (attrs) => {
+    return await prisma.brand.upsert({
+      where: { key: attrs.key },
+      update: {},
+      create: { ...attrs },
+    })
+  });
+  const results = await Promise.all(promises);
+
+  console.log({ brands: results });
+}
+
+async function main() {
+  await loadCategories();
+  await loadBrands();
 }
 
 // execute the main function

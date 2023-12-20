@@ -1,7 +1,7 @@
-import { Category } from '@prisma/client';
+import { Brand } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CategoryEntity implements Category {
+export class BrandEntity implements Brand {
   @ApiProperty()
   id: number;
 
@@ -12,10 +12,10 @@ export class CategoryEntity implements Category {
   name: string;
 
   @ApiProperty()
-  color: string | null;
+  url: string | null;
 
   @ApiProperty()
-  image: string | null;
+  logo: string | null;
 
   @ApiProperty({ required: false, default: [] })
   alias: string[];

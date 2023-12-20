@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "key" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "displayName" TEXT NOT NULL,
     "alias" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -11,4 +11,7 @@ CREATE TABLE "Category" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
+CREATE UNIQUE INDEX "Category_id_key" ON "Category"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Category_key_key" ON "Category"("key");
