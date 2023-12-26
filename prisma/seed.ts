@@ -38,7 +38,45 @@ async function loadCategories() {
 
 async function loadBrands() {
   const brands = [
-    { key: 'sports', name: 'Deportes y Wellness' },
+    {
+      key: 'santander',
+      name: 'Banco Santander',
+      url: 'https://banco.santander.cl/beneficios',
+      logo: 'https://banco.santander.cl/uploads/000/003/697/9c2347b3-ca36-4f53-9f65-5cd6bdabf0d2/original/logo_santander_new.svg',
+    },
+    {
+      key: 'bancochile',
+      name: 'Banco de Chile',
+      url: 'https://portales.bancochile.cl/personas/beneficios',
+      logo: 'https://portales.bancochile.cl/uploads/000/035/565/2ca8e2c5-606c-47f4-80ef-03bec528775d/original/bch-inverse.svg',
+    },
+    {
+      key: 'bci',
+      name: 'Banco BCI',
+      url: 'https://www.bci.cl/beneficios',
+      logo: 'https://cdn3.bci.cl/uploads/e682d72b-13b1-49a3-93ce-20f6252e1d17/original/logo_bci_negro.svg',
+    },
+    {
+      key: 'dunkin',
+      name: 'Dunkin\'',
+      url: 'https://dunkin.cl',
+      logo: 'https://dunkin.cl/wp-content/uploads/2022/03/Logo-Dunkin-Chile-2023.png',
+      alias: ['dunkin donuts'],
+    },
+    {
+      key: 'copec',
+      name: 'COPEC',
+      url: 'https://ww2.copec.cl/personas',
+      logo: 'https://d33d0wsrjjxvsf.cloudfront.net/uploads/d5c1aec2-afa1-44b0-b378-44e41c1005fa/original/logo-copec-2023.svg',
+    },
+    {
+      key: 'cinepolis',
+      name: 'Cinepolis',
+      url: 'https://cinepolischile.cl',
+      logo: 'https://static.cinepolis.com/img/lg-cinepolis-new.png',
+      alias: ['hoyts', 'cine hoyts'],
+    },
+
   ];
 
   const promises = brands.map(async (attrs) => {
