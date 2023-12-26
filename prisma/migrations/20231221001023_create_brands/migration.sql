@@ -17,13 +17,9 @@ CREATE TABLE "Brand" (
 );
 
 -- CreateTable
-CREATE TABLE "CategoriesOnBrands" (
-    "id" SERIAL NOT NULL,
-    "brandId" INTEGER NOT NULL,
-    "categoryId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "CategoriesOnBrands_pkey" PRIMARY KEY ("id")
+CREATE TABLE "_BrandToCategory" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
@@ -33,13 +29,13 @@ CREATE UNIQUE INDEX "Brand_id_key" ON "Brand"("id");
 CREATE UNIQUE INDEX "Brand_key_key" ON "Brand"("key");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "CategoriesOnBrands_id_key" ON "CategoriesOnBrands"("id");
+CREATE UNIQUE INDEX "_BrandToCategory_AB_unique" ON "_BrandToCategory"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "CategoriesOnBrands_brandId_categoryId_idx" ON "CategoriesOnBrands"("brandId", "categoryId");
+CREATE INDEX "_BrandToCategory_B_index" ON "_BrandToCategory"("B");
 
 -- AddForeignKey
-ALTER TABLE "CategoriesOnBrands" ADD CONSTRAINT "CategoriesOnBrands_brandId_fkey" FOREIGN KEY ("brandId") REFERENCES "Brand"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "_BrandToCategory" ADD CONSTRAINT "_BrandToCategory_A_fkey" FOREIGN KEY ("A") REFERENCES "Brand"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CategoriesOnBrands" ADD CONSTRAINT "CategoriesOnBrands_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "_BrandToCategory" ADD CONSTRAINT "_BrandToCategory_B_fkey" FOREIGN KEY ("B") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;

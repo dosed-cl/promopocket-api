@@ -7,7 +7,11 @@ import { CategoriesModule } from './categories/categories.module';
 import { BrandsModule } from './brands/brands.module';
 
 @Module({
-  imports: [PrismaModule.forRoot({ isGlobal: true }), CategoriesModule, BrandsModule],
+  imports: [
+    PrismaModule.forRoot({ isGlobal: true }),
+    CategoriesModule,
+    BrandsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

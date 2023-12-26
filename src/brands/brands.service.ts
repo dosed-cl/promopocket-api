@@ -9,7 +9,15 @@ export class BrandsService {
   constructor(private prisma: PrismaService) {}
 
   create(createBrandDto: CreateBrandDto) {
-    return this.prisma.brand.create({ data: createBrandDto });
+    const { categories, ...brand } = createBrandDto;
+    return this.prisma.brand.create({
+      data: {
+        ...brand,
+        categories: {
+          connect: categories?.map(({ id }) => ({ id })),
+        },
+      },
+    });
   }
 
   findAll() {
@@ -17,13 +25,28 @@ export class BrandsService {
   }
 
   findOne(id: number) {
-    return this.prisma.brand.findFirstOrThrow({ where: { id } });
+    return this.prisma.brand.findFirstOrThrow({
+      where: { id },
+      include: { categories: true },
+    });
   }
 
   update(id: number, updateBrandDto: UpdateBrandDto) {
+    const { categories, ...brand } = updateBrandDto;
     return this.prisma.brand.update({
       where: { id },
-      data: updateBrandDto,
+      data: {
+        ...brand,
+        categories: categories
+          ? {
+              set: [],
+              connect: categories?.map(({ id }) => ({ id })),
+            }
+          : undefined,
+      },
+      include: {
+        categories: true,
+      },
     });
   }
 

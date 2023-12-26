@@ -38,4 +38,9 @@ export class CreateBrandDto {
   @IsArray()
   @ApiProperty({ required: false, default: [] })
   alias?: string[] = [];
+
+  @IsOptional()
+  @IsArray()
+  @ApiProperty()
+  categories?: { id: number }[];
 }
