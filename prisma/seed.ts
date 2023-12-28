@@ -1,5 +1,6 @@
-import { PrismaClient, RedeemType, ValueType } from '@prisma/client';
+import { PrismaClient, RedeemType, UserType, ValueType } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import { emailFromAccount, hashPassword } from '../src/utils/users';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -125,10 +126,32 @@ async function loadBenefits(brands: { id: number; key: string }[]) {
   return results;
 }
 
+async function loadUsers() {
+  const users = [
+    {
+      email: emailFromAccount('server_account'),
+      password: await hashPassword('VkZIAY5qSi5f7u5USIDsDgh59SqBq5aE'),
+      userType: UserType.SERVER,
+    },
+  ];
+
+  const promises = users.map(async (attrs) => {
+    return await prisma.user.createMany({
+      data: attrs,
+    });
+  });
+  const results = await Promise.all(promises);
+
+  console.log({ users: results });
+
+  return results;
+}
+
 async function main() {
   const _categories = await loadCategories();
   const brands = await loadBrands();
   const _benefits = await loadBenefits(brands);
+  const _users = await loadUsers();
 }
 
 // execute the main function
