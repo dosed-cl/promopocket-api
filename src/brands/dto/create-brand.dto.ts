@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsUrl,
   IsString,
@@ -9,6 +10,11 @@ import {
   MinLength,
 } from 'class-validator';
 
+class RelatedId {
+  @IsNumber()
+  @ApiProperty()
+  id: number;
+}
 export class CreateBrandDto {
   @IsString()
   @IsNotEmpty()
@@ -41,6 +47,6 @@ export class CreateBrandDto {
 
   @IsOptional()
   @IsArray()
-  @ApiProperty()
-  categories?: { id: number }[];
+  @ApiProperty({ type: [RelatedId], required: false })
+  categories: [RelatedId];
 }

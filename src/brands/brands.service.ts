@@ -17,6 +17,7 @@ export class BrandsService {
           connect: categories?.map(({ id }) => ({ id })),
         },
       },
+      include: { categories: true },
     });
   }
 

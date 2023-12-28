@@ -1,5 +1,5 @@
-/* eslint-disable prettier/prettier */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RedeemType, ValueType } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -29,11 +29,13 @@ async function loadCategories() {
       where: { key },
       update: {},
       create: { key, name },
-    })
+    });
   });
   const results = await Promise.all(promises);
 
   console.log({ categories: results });
+
+  return results;
 }
 
 async function loadBrands() {
@@ -58,7 +60,7 @@ async function loadBrands() {
     },
     {
       key: 'dunkin',
-      name: 'Dunkin\'',
+      name: "Dunkin'",
       url: 'https://dunkin.cl',
       logo: 'https://dunkin.cl/wp-content/uploads/2022/03/Logo-Dunkin-Chile-2023.png',
       alias: ['dunkin donuts'],
@@ -76,7 +78,6 @@ async function loadBrands() {
       logo: 'https://static.cinepolis.com/img/lg-cinepolis-new.png',
       alias: ['hoyts', 'cine hoyts'],
     },
-
   ];
 
   const promises = brands.map(async (attrs) => {
@@ -84,16 +85,50 @@ async function loadBrands() {
       where: { key: attrs.key },
       update: {},
       create: { ...attrs },
-    })
+    });
   });
   const results = await Promise.all(promises);
 
   console.log({ brands: results });
+
+  return results;
+}
+
+async function loadBenefits(brands: { id: number; key: string }[]) {
+  const benefits = [
+    {
+      externalId: faker.string.alphanumeric({ length: 8 }),
+      title: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      redeemType: RedeemType.ONLINE,
+      valueType: ValueType.PERCENT,
+      value: faker.number.float({ min: 0.1, max: 0.7, precision: 0.01 }),
+      image: faker.image.url(),
+      url: faker.internet.url(),
+      terms: faker.lorem.lines(),
+      termsUrl: faker.internet.url(),
+      daysAvailable: { mo: true, we: true },
+      sponsorId: brands.find((b) => b.key == 'santander')?.id || 1,
+      benefactorId: brands.find((b) => b.key == 'dunkin')?.id || 2,
+    },
+  ];
+
+  const promises = benefits.map(async (attrs) => {
+    return await prisma.benefit.createMany({
+      data: attrs,
+    });
+  });
+  const results = await Promise.all(promises);
+
+  console.log({ benefits: results });
+
+  return results;
 }
 
 async function main() {
-  await loadCategories();
-  await loadBrands();
+  const _categories = await loadCategories();
+  const brands = await loadBrands();
+  const _benefits = await loadBenefits(brands);
 }
 
 // execute the main function

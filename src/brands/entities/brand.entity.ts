@@ -26,3 +26,14 @@ export class BrandEntity implements Brand {
   @ApiProperty()
   updatedAt: Date;
 }
+
+export class BrandEntityMin {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  url?: string;
+}
