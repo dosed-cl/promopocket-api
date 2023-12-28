@@ -11,10 +11,64 @@ datasource db {
 }
 
 model Category {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  displayName String
+  id          Int      @id @unique @default(autoincrement())
+  key         String   @unique
+  name        String
+  color       String?
+  image       String?
   alias       String[] @default([])
+  brands      Brand[]
+  benefits    Benefit[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Brand {
+  id          Int      @id @unique @default(autoincrement())
+  key         String   @unique
+  name        String
+  url         String?
+  logo        String?
+  alias       String[] @default([])
+  categories  Category[]
+  sponsored   Benefit[] @relation("BenefitSponsor")
+  benefacted  Benefit[] @relation("BenefitBenefactor")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model Benefit {
+  id             Int      @id @unique @default(autoincrement())
+  externalId     String
+  title          String
+  description    String
+  redeemType     RedeemType
+  valueType      ValueType
+  value          Float
+  image          String?
+  url            String?
+  terms          String?
+  termsUrl       String?
+  startDate      DateTime @default(now())
+  endDate        DateTime @default(dbgenerated("NOW() + interval '1 year'"))
+  daysAvailable  Json @default("{}")
+  sponsorId      Int
+  sponsor        Brand @relation("BenefitSponsor", fields: [sponsorId], references: [id])
+  benefactorId   Int
+  benefactor      Brand @relation("BenefitBenefactor", fields: [benefactorId], references: [id])
+  categories     Category[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum ValueType {
+  PERCENT
+  FIXED
+  OTHER
+}
+
+enum RedeemType {
+  INSTORE
+  ONLINE
+  CODE
+  OTHER
 }

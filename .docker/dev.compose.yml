@@ -10,7 +10,6 @@ services:
       - nestmods:/app/node_modules:cached
     ports:
       - 3000:3000
-      - 9229:9229
     restart: unless-stopped
     tty: true
     stdin_open: true
