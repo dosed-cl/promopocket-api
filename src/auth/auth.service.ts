@@ -26,7 +26,28 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.jwtService.sign({ userId: user.id }),
+      accessToken: this.jwtService.sign(
+        { userId: user.id, userType: user.userType },
+        { expiresIn: '10m' },
+      ),
+    };
+  }
+
+  async login(email: string, password: string): Promise<AuthEntity> {
+    const user = await this.prisma.user.findUnique({
+      where: { email, userType: UserType.BASIC },
+    });
+
+    const isValid = await bcrypt.compare(password, user?.password || 'not');
+    if (!user || !isValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return {
+      accessToken: this.jwtService.sign({
+        userId: user.id,
+        userType: user.userType,
+      }),
     };
   }
 }

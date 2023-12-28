@@ -6,6 +6,12 @@ import { CreateServerUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { emailFromAccount, hashPassword } from 'src/utils/users';
 
+const selectMin = {
+  email: true,
+  userType: true,
+  createdAt: true,
+  updatedAt: true,
+};
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -20,9 +26,10 @@ export class UsersService {
     });
   }
 
-  findOne(id: number, userType: UserType = UserType.BASIC) {
+  findOne(id: number, userType: UserType = UserType.BASIC, full = false) {
     return this.prisma.user.findFirstOrThrow({
       where: { id, userType },
+      select: full ? null : selectMin,
     });
   }
 
@@ -36,6 +43,7 @@ export class UsersService {
         ...updateUserDto,
         password,
       },
+      select: selectMin,
     });
   }
 }

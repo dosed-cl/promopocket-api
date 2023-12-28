@@ -19,6 +19,7 @@ async function bootstrap() {
     .setTitle('PromoPocket')
     .setDescription('The PromoPocket API description')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

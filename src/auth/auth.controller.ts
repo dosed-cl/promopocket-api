@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -12,7 +12,12 @@ export class AuthController {
 
   @Post('login')
   @ApiOkResponse({ type: AuthEntity })
-  login(@Body() { account, secret }: ServerLoginDto) {
-    return this.authService.serverLogin(account, secret);
+  login(@Body() params: ServerLoginDto) {
+    if (params.account && params.secret)
+      return this.authService.serverLogin(params.account, params.secret);
+    else if (params.email && params.password)
+      return this.authService.login(params.email, params.password);
+
+    throw new UnauthorizedException('Invalid credentials');
   }
 }
