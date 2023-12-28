@@ -33,6 +33,7 @@ model Brand {
   categories  Category[]
   sponsored   Benefit[] @relation("BenefitSponsor")
   benefacted  Benefit[] @relation("BenefitBenefactor")
+  users       User[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -54,7 +55,7 @@ model Benefit {
   sponsorId      Int
   sponsor        Brand @relation("BenefitSponsor", fields: [sponsorId], references: [id])
   benefactorId   Int
-  benefactor      Brand @relation("BenefitBenefactor", fields: [benefactorId], references: [id])
+  benefactor     Brand @relation("BenefitBenefactor", fields: [benefactorId], references: [id])
   categories     Category[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -71,4 +72,19 @@ enum RedeemType {
   ONLINE
   CODE
   OTHER
+}
+
+model User {
+  id         Int      @id @unique @default(autoincrement())
+  email      String   @unique
+  password   String
+  userType   UserType
+  brands     Brand[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum UserType {
+  SERVER
+  BASIC
 }

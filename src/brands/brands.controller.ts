@@ -14,6 +14,7 @@ import { BrandsService } from './brands.service';
 import { BrandEntity } from './entities/brand.entity';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { Auth } from 'src/auth/auth.decorator';
 
 @Controller('brands')
 @ApiTags('brands')
@@ -21,6 +22,7 @@ export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 
   @Post()
+  @Auth('SERVER')
   @ApiCreatedResponse({ type: BrandEntity })
   create(@Body() createBrandDto: CreateBrandDto) {
     return this.brandsService.create(createBrandDto);
@@ -39,6 +41,7 @@ export class BrandsController {
   }
 
   @Patch(':id')
+  @Auth('SERVER')
   @ApiOkResponse({ type: BrandEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -48,6 +51,7 @@ export class BrandsController {
   }
 
   @Delete(':id')
+  @Auth('SERVER')
   @ApiOkResponse({ type: BrandEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.brandsService.remove(id);

@@ -5,6 +5,8 @@ services:
     build:
       context: ..
       dockerfile: .docker/dev.Dockerfile
+    environment:
+      - JWT_SECRET
     volumes:
       - ../.:/app:cached
       - nestmods:/app/node_modules:cached
